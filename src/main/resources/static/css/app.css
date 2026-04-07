@@ -1,0 +1,164 @@
+/* src/main/resources/static/css/app.css */
+
+:root {
+    --bg:           #1e1e1e;
+    --surface:      #252526;
+    --surface-2:    #2d2d30;
+    --surface-3:    #3c3c3c;
+    --border:       #454545;
+    --text:         #d4d4d4;
+    --text-muted:   #858585;
+    --text-faint:   #555;
+    --accent:       #4fc3f7;
+    --accent-hover: #81d4fa;
+    --success:      #4caf50;
+    --error:        #f44747;
+    --header-h:     44px;
+    --pane-header-h: 32px;
+    --settings-w:   360px;
+    --divider-w:    5px;
+    --radius:       4px;
+    --transition:   160ms ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+/* --- Шапка --- */
+.app-header {
+    height: var(--header-h);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    flex-shrink: 0;
+    user-select: none;
+}
+.app-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.app-actions { display: flex; gap: 6px; }
+
+/* --- Кнопки --- */
+.btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 10px; border-radius: var(--radius);
+    border: 1px solid transparent; font-size: 12px;
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.btn-ghost { background: transparent; border-color: var(--border); color: var(--text-muted); }
+.btn-ghost:hover { background: var(--surface-3); color: var(--text); border-color: var(--surface-3); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+.btn-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border: none; background: transparent;
+    color: var(--text-muted); border-radius: var(--radius); cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+}
+.btn-icon:hover { background: var(--surface-3); color: var(--text); }
+
+/* --- Split layout --- */
+.split-layout { display: flex; height: calc(100vh - var(--header-h)); overflow: hidden; }
+.pane { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.pane-editor  { flex: 0 0 50%; }
+.pane-preview { flex: 1 1 0; }
+.pane-header {
+    height: var(--pane-header-h); background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 10px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--text-muted); flex-shrink: 0; user-select: none;
+}
+.hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 11px; }
+
+/* --- Разделитель --- */
+.split-divider {
+    width: var(--divider-w); background: var(--border);
+    cursor: col-resize; flex-shrink: 0;
+    transition: background var(--transition); position: relative;
+}
+.split-divider::after { content: ''; position: absolute; inset: 0 -3px; }
+.split-divider:hover, .split-divider.dragging { background: var(--accent); }
+
+/* --- CodeMirror --- */
+.CodeMirror {
+    height: 100% !important;
+    font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", Consolas, monospace !important;
+    font-size: 13px !important; line-height: 1.6 !important;
+    background: var(--bg) !important; color: #d4d4d4 !important;
+}
+.CodeMirror-scroll { height: 100%; }
+.CodeMirror-gutters { background: var(--surface) !important; border-right: 1px solid var(--border) !important; }
+.CodeMirror-linenumber { color: var(--text-faint) !important; }
+.CodeMirror-cursor { border-left: 2px solid var(--accent) !important; }
+.CodeMirror-selected { background: rgba(79,195,247,.15) !important; }
+
+/* --- Превью --- */
+.preview-scroll { flex: 1; overflow: auto; padding: 20px; background: var(--bg); }
+#diagram-output { display: inline-block; min-width: 100%; }
+#diagram-output svg { display: block; transform-origin: top left; max-width: none; }
+
+/* --- Статус --- */
+.render-status { font-size: 11px; font-weight: 500; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.render-status.status-ok    { color: var(--success); }
+.render-status.status-error { color: var(--error); }
+
+/* --- Overlay + Settings panel --- */
+.settings-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    opacity: 0; pointer-events: none;
+    transition: opacity 220ms ease; z-index: 90;
+}
+.settings-overlay.visible { opacity: 1; pointer-events: all; }
+
+.settings-panel {
+    position: fixed; top: 0; right: 0;
+    width: var(--settings-w); height: 100%;
+    background: var(--surface); border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+}
+.settings-panel.open { transform: translateX(0); }
+.settings-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; height: var(--header-h);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.settings-header h2 { font-size: 14px; font-weight: 600; }
+.settings-body { flex: 1; overflow-y: auto; padding: 0 14px 14px; scrollbar-width: thin; }
+.settings-section { padding: 14px 0; border-bottom: 1px solid var(--border); }
+.settings-section:last-child { border-bottom: none; }
+.settings-section h3 {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--text-muted); margin-bottom: 10px;
+}
+.field-label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.field-label:last-child { margin-bottom: 0; }
+.field-label input, .field-label select {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text);
+    font-size: 12px; padding: 5px 8px; outline: none; width: 100%;
+    transition: border-color var(--transition);
+}
+.field-label input:focus, .field-label select:focus { border-color: var(--accent); }
+.checkbox-label { flex-direction: row !important; align-items: center; gap: 8px !important; cursor: pointer; }
+.checkbox-label input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); flex-shrink: 0; }
+.checkbox-label em { font-style: normal; color: var(--text-faint); }
+.settings-footer {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding: 12px 14px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

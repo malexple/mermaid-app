@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mermaid-app
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML
+
+server:
+  port: 8085
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    ru.mcs.mermaid: DEBUG
+    org.springframework.web: INFO
